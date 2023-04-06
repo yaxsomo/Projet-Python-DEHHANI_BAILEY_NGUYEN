@@ -23,7 +23,7 @@ Efficacité des outils de simulation
 Nombre de données stockées dans la base de données
 Technologies:
 
-### Langages de programmation: Python, Java
+### Langages de programmation: Python
 ### Base de données: MongoDB
 ### Frameworks: Flask, Spring Boot
 ### Livraison:
