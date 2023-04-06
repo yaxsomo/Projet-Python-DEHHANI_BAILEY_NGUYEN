@@ -1,8 +1,16 @@
-from sat_libraries import user, admin
-from flask import Flask, jsonify
+from sat_libraries import user, admin, functions
+from flask import Flask, jsonify, render_template
+import io
+from flask import Response
+import random
+from flask import Response
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+from matplotlib.figure import Figure
+import matplotlib.pyplot as plt
+import numpy as np
+
 
 app = Flask(__name__)
-
 ## Routes :
 
 # Route API pour l'utilisateur
@@ -52,6 +60,29 @@ def show_user_interface():
     content += '</div>'
     return content
 
+@app.route('/user/<int:satellite_id>')
+def get_satellite_data(satellite_id):
+    satellite = user.get_satellite_data(satellite_id).json
+    content = '<div style="display:flex;">'
+    content += '<div style="border: 1px solid black; padding: 10px; width:100%;">'
+    content += f'<h3>Satellite Name : {satellite["satNAME"]}</h3>'
+    content += f'<p><strong>Satellite ID:</strong> {satellite["satID"]}</p>'
+    content += f'<p><strong>Launch Date:</strong> {satellite["launchDate"]}</p>'
+    content += f'<p><strong>Apogee:</strong> {satellite["satAPO"]}</p>'
+    content += f'<p><strong>Eccentricity:</strong> {satellite["satECC"]}</p>'
+    content += f'<p><strong>Inclination:</strong> {satellite["satINC"]}</p>'
+    content += f'<p><strong>Perigee:</strong> {satellite["satPER"]}</p>'
+    content += f'<p><strong>Logitude:</strong> {satellite["satLONG"]}</p>'
+    content += f'<p><strong>Position:</strong> {satellite["satPOS"]}</p>'
+    content += '<hr>'
+    content += '</div>'
+    # # return satellite
+    # fig = test(satellite)
+    # output = io.BytesIO()
+    # FigureCanvas(fig).print_png(output)
+    # return Response(output.getvalue(), mimetype='image/png')
+    return content
+    
 
 
 # Route API pour l'administrateur

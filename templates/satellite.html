@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Satellite Visualization</title>
+  <script src="https://cdn.jsdelivr.net/npm/@vpython/vpython@7.5.2/dist/vpython.min.js"></script>
+</head>
+<body>
+  <div id="vp-container"></div>
+
+  <script>
+    const satellite = {{ satellite|tojson }};
+    const apogee = satellite.satAPO;
+    const eccentricity = satellite.satECC;
+    const inclination = satellite.satINC;
+    const longitude = satellite.satLONG;
+    const position = satellite.satPOS;
+    const perigee = satellite.satPER;
+
+    // Create canvas element
+    const canvas = document.createElement("canvas");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    document.getElementById("vp-container").appendChild(canvas);
+
+    // Create 3D render using VPython
+    const scene = canvas;
+    const sphere = sphere({
+        radius: 5,
+        pos: vector(0, 0, 0),
+        color: color.white
+    });
+    const sun = sphere({
+        radius: 20,
+        pos: vector(0, 0, -50),
+        color: color.yellow
+    });
+    const camera = vector(0, 0, 100);
+    const light = local_light(pos=camera, color=color.white);
+    const anim = function() {
+        rate(30, function() {
+            sphere.rotate({angle: 0.01, axis: vector(1, 0, 0)});
+            sphere.rotate({angle: 0.03, axis: vector(0, 1, 0)});
+            sphere.rotate({angle: 0.07, axis: vector(0, 0, 1)});
+        });
+    };
+    anim();
+  </script>
+</body>
+</html>
