@@ -5,9 +5,9 @@ Le projet consiste en la création d'une plateforme de suivi de satellites. Cett
 
 ## Fonctionnalités:
 
-Collecte de données de différents satellites en orbite
-Traitement de données pour fournir des informations de suivi en temps réel
-Stockage de données dans une base de données pour une consultation ultérieure
+Collecte de données de différents satellites en orbite <br>
+Traitement de données pour fournir des informations de suivi en temps réel <br>
+Stockage de données dans une base de données pour une consultation ultérieure <br>
 Outils de simulation pour tester les services
 Tableau de bord pour visualiser les données de suivi des satellites
 
