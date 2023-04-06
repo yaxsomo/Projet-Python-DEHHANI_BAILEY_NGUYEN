@@ -12,7 +12,19 @@ Traitement de données pour fournir des informations de suivi en temps réel
 Stockage de données dans une base de données pour une consultation ultérieure
 Outils de simulation pour tester les services
 Tableau de bord pour visualiser les données de suivi des satellites
-Métriques:
+
+### Utilisateurs : 
+ - Administrateur :
+      - Accepter ou refuser une mise en orbit
+      - Mettre un satellite en orbite
+      - Supprimer des orbites
+      - Administration de la base de données
+      
+  - Client : 
+      - Faire une demande de mise en orbite
+      - Accéder aux données de tous les satellites
+
+## Métriques:
 
 Temps de réponse pour accéder aux données
 Disponibilité du service de suivi
@@ -25,7 +37,8 @@ Technologies:
 
 ### Langages de programmation: Python
 ### Base de données: MongoDB
-### Frameworks: Flask, Spring Boot
+### Frameworks: Flask
+
 ### Livraison:
 
 SDK pour accéder aux données de suivi des satellites
