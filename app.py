@@ -7,11 +7,35 @@ app = Flask(__name__)
 
 # Route API pour l'utilisateur
 @app.route('/user')
-# def show_user_interface():
-#     return user.get_all_satellite_data()
 def show_user_interface():
     data = user.get_all_satellite_data().json
-    content = '<div style="border: 1px solid black; padding: 10px; width:50%;">'
+        # Create a div for the form
+    form_div = '<div style="border: 1px solid black; padding: 10px; width: 100%;text-align: center;">'
+    form_div += '<h3>Add a new satellite:</h3>'
+    form_div += '<form method="POST" action="/add_satellite">'
+    form_div += '<label for="name">Satellite name:</label><br>'
+    form_div += '<input type="text" id="name" name="name"><br>'
+    form_div += '<label for="date">Launch date:</label><br>'
+    form_div += '<input type="date" id="date" name="date"><br>'
+    form_div += '<label for="apo">Apogee:</label><br>'
+    form_div += '<input type="number" id="apo" name="apo"><span>&#176;</span><br>'
+    form_div += '<label for="ecc">Eccentricity:</label><br>'
+    form_div += '<input type="number" step="0.01" id="ecc" name="ecc"><span>&#176;</span><br>'
+    form_div += '<label for="inc">Inclination:</label><br>'
+    form_div += '<input type="number" id="inc" name="inc"><span>&#176;</span><br>'
+    form_div += '<label for="per">Perigee:</label><br>'
+    form_div += '<input type="number" id="per" name="per"><span>&#176;</span><br>'
+    form_div += '<label for="long">Longitude:</label><br>'
+    form_div += '<input type="number" step="0.01" id="long" name="long"><span>&#176;</span><br>'
+    form_div += '<label for="pos">Position:</label><br>'
+    form_div += '<input type="text" id="pos" name="pos"><span>&#176;</span><br><br>'
+    form_div += '<input type="submit" value="Submit">'
+    form_div += '</form></div>'
+
+
+    # Create a div to display the satellite data and form side by side
+    content = '<div style="display:flex;">'
+    content += '<div style="border: 1px solid black; padding: 10px; width:100%;">'
     for satellite in data['satellites']:
         content += f'<h3>Satellite Name : {satellite["satNAME"]}</h3>'
         content += f'<p><strong>Satellite ID:</strong> {satellite["satID"]}</p>'
@@ -23,6 +47,8 @@ def show_user_interface():
         content += f'<p><strong>Logitude:</strong> {satellite["satLONG"]}</p>'
         content += f'<p><strong>Position:</strong> {satellite["satPOS"]}</p>'
         content += '<hr>'
+    content += '</div>'
+    content += form_div
     content += '</div>'
     return content
 
