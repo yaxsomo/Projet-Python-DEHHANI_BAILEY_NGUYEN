@@ -13,7 +13,7 @@ Tableau de bord pour visualiser les données de suivi des satellites
 
 ### Utilisateurs : 
  - Administrateur :
-      - Accepter ou refuser une mise en orbit
+      - Accepter ou refuser une mise en orbite
       - Mettre un satellite en orbite
       - Supprimer des orbites
       - Administration de la base de données
