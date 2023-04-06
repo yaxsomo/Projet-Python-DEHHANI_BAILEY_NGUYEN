@@ -39,7 +39,7 @@ Tableau de bord pour visualiser les données de suivi des satellites
 - Efficacité des outils de simulation
 - Vitesse des satellites
 
- Exemple d'API pour recuperer les informations d'un satellite en temps réel  : 
+ Exemple de réponse API : 
  
  ```json
  {
