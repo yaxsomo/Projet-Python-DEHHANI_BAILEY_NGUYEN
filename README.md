@@ -20,7 +20,7 @@ Tableau de bord pour visualiser les données de suivi des satellites
       - Supprimer des orbites
       - Administration de la base de données
       
-  - Client : 
+    - Client : 
       - Faire une demande de mise en orbite
       - Accéder aux données de tous les satellites
 
