@@ -1,6 +1,7 @@
 from flask import Flask, jsonify
 import random
 import datetime
+import json
 
 app = Flask(__name__)
 
@@ -28,6 +29,10 @@ for i in range(1, num_satellites+1):
 
 # Trier les satellites par ordre de date de lancement
 sorted_satellites = sorted(satellites.values(), key=lambda x: datetime.datetime.strptime(x['launchDate'], '%Y-%m-%d'))
+
+# Écrire le JSON dans un fichier
+with open('satellites.json', 'w') as f:
+    json.dump({'satellites': sorted_satellites}, f)
 
 # Route API pour récupérer les données d'un satellite en particulier
 @app.route('/satellite/<int:satellite_id>')
