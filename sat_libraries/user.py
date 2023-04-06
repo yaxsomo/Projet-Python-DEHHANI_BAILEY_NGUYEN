@@ -14,3 +14,4 @@ def get_satellite_data(satellite_id):
 
 def get_all_satellite_data():
     return jsonify({"satellites": satellites})
+
