@@ -62,7 +62,7 @@ Tableau de bord pour visualiser les données de suivi des satellites
 ## Technologies:
 
 #### Langages de programmation: Python
-#### Base de données: MongoDB
+#### Base de données: JSON
 #### Frameworks: Flask
 
 ## Livraison:
