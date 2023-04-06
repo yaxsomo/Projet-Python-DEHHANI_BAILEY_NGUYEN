@@ -48,14 +48,13 @@ Tableau de bord pour visualiser les données de suivi des satellites
  {
   "satID": {
     "satNAME": "SPACE STATION",
-    "satLAT": -39.90318514,
-    "satLONG": 158.28897924,
     "launchDate": "2015-07-10",
-    "satALT": 417.85,
-    "satAZ": 254.31,
-    "elevation": -69.09,
-    "ra": 44.77078138,
-    "dec": -43.99279118
+    "satAPO":  6.00,
+    "satECC":  1.00,
+    "satINC":  180deg,
+    "satPER":  360deg,
+    "satLONG": 360deg,
+    "satPOS":  360deg
     }
 }
 ```
