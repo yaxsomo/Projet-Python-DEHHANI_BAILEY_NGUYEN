@@ -20,19 +20,45 @@ Tableau de bord pour visualiser les données de suivi des satellites
       - Supprimer des orbites
       - Administration de la base de données
       
-    - Client : 
+ - Client : 
       - Faire une demande de mise en orbite
       - Accéder aux données de tous les satellites
 
-## Métriques:
+## Métriques :
 
-Temps de réponse pour accéder aux données
-Disponibilité du service de suivi
-Taux de réussite de stockage des données dans la base de données
-Temps de réponse pour les requêtes de suivi en temps réel
-Nombre de requêtes simultanées supportées
-Efficacité des outils de simulation
-Nombre de données stockées dans la base de données
+- Position des satellites en temps réel
+- Orbites
+- Périapsis
+- Apoapsis
+
+ Exemple de métrique : 
+ 
+ ```
+ {
+  "satID": {
+    "satNAME": "SPACE STATION",
+    "satLAT": -39.90318514,
+    "satLONG": 158.28897924,
+    "launchDate": "2015-07-10",
+    "satALT": 417.85,
+    "satAZ": 254.31,
+    "elevation": -69.09,
+    "ra": 44.77078138,
+    "dec": -43.99279118
+    }
+}
+```
+## Métriques Optionnelles : 
+
+- Disponibilité du service de suivi
+- Taux de réussite de stockage des données dans la base de données
+- Nombre de requêtes simultanées supportées
+- Temps de réponse pour les requêtes de suivi en temps réel
+- Efficacité des outils de simulation
+- Vitesse des satellites
+
+
+
 Technologies:
 
 ### Langages de programmation: Python
