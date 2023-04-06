@@ -51,10 +51,10 @@ Tableau de bord pour visualiser les données de suivi des satellites
     "launchDate": "2015-07-10",
     "satAPO":  6.00,
     "satECC":  1.00,
-    "satINC":  180deg,
-    "satPER":  360deg,
-    "satLONG": 360deg,
-    "satPOS":  360deg
+    "satINC":  180°,
+    "satPER":  360°,
+    "satLONG": 360°,
+    "satPOS":  360°
     }
 }
 ```
