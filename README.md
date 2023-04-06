@@ -1,11 +1,11 @@
 Projet de fin de module "Manipulation de données en Python"
 
-##Titre du projet: ###Plateforme de suivi de satellites
+## Titre du projet: ### Plateforme de suivi de satellites
 
-##Description:
+## Description:
 Le projet consiste en la création d'une plateforme de suivi de satellites. Cette plateforme permettra de collecter des données de différents satellites en orbite et de fournir des informations de suivi à des clients en temps réel. La plateforme sera composée d'un SDK pour accéder aux données, d'un ou plusieurs services pour traiter les données, d'une base de données pour stocker les données, d'outils de simulation pour tester les services, d'un tableau de bord pour visualiser les données, et d'une documentation complète pour faciliter la compréhension et la maintenance du projet.
 
-##Fonctionnalités:
+## Fonctionnalités:
 
 Collecte de données de différents satellites en orbite
 Traitement de données pour fournir des informations de suivi en temps réel
@@ -23,10 +23,10 @@ Efficacité des outils de simulation
 Nombre de données stockées dans la base de données
 Technologies:
 
-###Langages de programmation: Python, Java
-###Base de données: MongoDB
-###Frameworks: Flask, Spring Boot
-###Livraison:
+### Langages de programmation: Python, Java
+### Base de données: MongoDB
+### Frameworks: Flask, Spring Boot
+### Livraison:
 
 SDK pour accéder aux données de suivi des satellites
 Service de suivi de satellites en temps réel
