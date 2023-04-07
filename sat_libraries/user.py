@@ -3,9 +3,10 @@ from flask import jsonify, redirect, request
 from sat_libraries import functions
 import json
 
-satellites = functions.get_satellites_data()
+
 
 def get_satellite_data(satellite_id):
+    satellites = functions.get_satellites_data()
     for satellite in satellites:
         if satellite['satID'] == satellite_id:
             return jsonify(satellite)
@@ -14,6 +15,7 @@ def get_satellite_data(satellite_id):
     
 
 def get_all_satellite_data():
+    satellites = functions.get_satellites_data()
     return jsonify({"satellites": satellites})
 
 

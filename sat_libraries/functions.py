@@ -6,7 +6,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 matplotlib.use("TKAgg")
 
-JSON_FILE_PATH = 'satellites.json'
+JSON_FILE_PATH = '../satellites.json'
 
 # Recuperer les satellites par ordre aleatoire
 def get_satellites_data():

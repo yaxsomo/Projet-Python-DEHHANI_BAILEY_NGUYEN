@@ -31,24 +31,26 @@ def add_satellite_admin():
         'satLONG': float(request.form['long']),
         'satPOS': float(request.form['pos'])
     }
-    satellites = []
 
-    # Check if requests.json exists and load existing data
-    if os.path.exists('requests.json'):
-        with open('requests.json', 'r') as f:
-            file_data = f.read()
-            if file_data:
-                satellites = json.loads(file_data)
+    with open('satellites.json', 'r') as f:
+        satellites = json.load(f)
 
-    if(functions.collision_detection(data)):
-        satellites.append(data)
-        with open('requests.json', 'w') as f:
-            json.dump(satellites, f)
-        print("Request sent successfully!")  
+    parsed_satellites = satellites['satellites']
+
+    if (functions.collision_detection(data)):
+        new_satellite = {
+            'satID': max([sat['satID'] for sat in parsed_satellites]) + 1,
+            **data
+        }
+        parsed_satellites.append(new_satellite)
+        with open('satellites.json', 'w') as f:
+            json.dump({'satellites': parsed_satellites}, f, indent=2)
+        print("Request sent successfully!")
     else:
         print("Request failed!")
-    
+
     return redirect('/admin')
+
 
 
 # def AddSatelliteByAdmin(name , launchDate , satAPO , satECC , satINC , satPER ,satLONG , satPOS):  # name , launchDate , satAPO , satECC , satINC , satPER ,satLONG , satPOS):
