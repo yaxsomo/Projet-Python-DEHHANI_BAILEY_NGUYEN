@@ -6,10 +6,11 @@ import matplotlib
 import matplotlib.pyplot as plt
 matplotlib.use("TKAgg")
 
+JSON_FILE_PATH = '../satellites.json'
 
 # Recuperer les satellites par ordre aleatoire
 def get_satellites_data():
-    with open('./satellites.json', 'r') as file:
+    with open(JSON_FILE_PATH, 'r') as file:
         data = json.load(file)
     return data['satellites']
 
@@ -36,8 +37,8 @@ def calculate_satellite_metrics(satellites):
     return num_satellites, metrics
 
 
-def add_four_to_satPOS(json_file_path):
-    with open(json_file_path, 'r') as file:
+def add_four_to_satPOS():
+    with open(JSON_FILE_PATH, 'r') as file:
         data = json.load(file)
 
     for satellite in data['satellites']:
@@ -49,5 +50,22 @@ def add_four_to_satPOS(json_file_path):
             satellite['satPOS'] += 4 - 360
             print("sat ID : ", satellite['satID'], "satPOS : ", satellite['satPOS'])
 
-    with open(json_file_path, 'w') as file:
+    with open(JSON_FILE_PATH, 'w') as file:
         json.dump(data, file, indent=4)
+
+
+def collision_detection(json_obj):
+
+    # Load the JSON file into a Python object
+    with open(JSON_FILE_PATH) as f:
+        data = json.load(f)
+
+    # Iterate over the list of satellites in the JSON object
+    for sat in data["satellites"]:
+        # Check if the value of "satECC" matches the input JSON object
+        if sat["satECC"] == json_obj["satECC"]:
+            print("There is a possible collision ! Please modify the orbite's eccentricity")
+            return False
+        
+    print("The path is clear ! Await for admin validation.")
+    return True
