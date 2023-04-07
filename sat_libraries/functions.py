@@ -2,7 +2,9 @@ import json
 
 
 
-JSON_FILE_PATH = '../satellites.json'
+JSON_FILE_PATH = 'satellites.json'
+REQUESTS_FILE_PATH = 'requests.json'
+
 
 # Recuperer les satellites par ordre aleatoire
 def get_satellites_data():
@@ -38,13 +40,13 @@ def add_four_to_satPOS():
         data = json.load(file)
 
     for satellite in data['satellites']:
-        print("sat ID : ", satellite['satID'], "satPOS : ", satellite['satPOS'])
+        # print("sat ID : ", satellite['satID'], "satPOS : ", satellite['satPOS'])
         if satellite['satPOS'] < 356:
             satellite['satPOS'] += 4
-            print("sat ID : ", satellite['satID'], "satPOS : ", satellite['satPOS'])
+            # print("sat ID : ", satellite['satID'], "satPOS : ", satellite['satPOS'])
         else:
             satellite['satPOS'] += 4 - 360
-            print("sat ID : ", satellite['satID'], "satPOS : ", satellite['satPOS'])
+            # print("sat ID : ", satellite['satID'], "satPOS : ", satellite['satPOS'])
 
     with open(JSON_FILE_PATH, 'w') as file:
         json.dump(data, file, indent=4)
@@ -68,3 +70,8 @@ def collision_detection(json_obj):
         
     print("The path is clear ! Await for admin validation.")
     return True
+
+def get_requests():
+    with open(REQUESTS_FILE_PATH) as file:
+        data = json.load(file)    
+    return data

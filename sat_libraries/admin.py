@@ -1,9 +1,6 @@
 import json
-import os
-
 from flask import redirect, request
 from sat_libraries import functions
-from datetime import datetime
 
 
 def DeleteOneSatelliteByAdmin(SatelliteID):
@@ -12,13 +9,18 @@ def DeleteOneSatelliteByAdmin(SatelliteID):
     for key, value in enumerate(data):
         if (value['satID'] == SatelliteID):
             data.pop(key)
-            print(key, value)
     result['satellites'] = data
-
-    print(len(data) , result)
-    #print("OUI" , newdata , "OUIi" , len(data))
     with open('../satellites.json', 'w') as file:
         json.dump(result, file)
+
+def DeleteOneSatelliteByAdmin(SatelliteName):
+    data = functions.get_requests()
+    for key, value in enumerate(data):
+        if (value['satNAME'] == SatelliteName):
+            data.pop(key)
+
+    with open('requests.json', 'w') as file:
+        json.dump(data, file)
 
 def add_satellite_admin():
     data = {
@@ -53,44 +55,32 @@ def add_satellite_admin():
 
 
 
-# def AddSatelliteByAdmin(name , launchDate , satAPO , satECC , satINC , satPER ,satLONG , satPOS):  # name , launchDate , satAPO , satECC , satINC , satPER ,satLONG , satPOS):
-#     id = functions.get_maxId() +1
-#     data = list(functions.get_satellites_data())
-
-#     date = datetime.strptime(launchDate, "%Y-%m-%d")
-#     result = {"satellites" : data}
-
-#     # print(len(result['satellites']))
-#     new_satellite = {"satID": id, "satNAME": name + str(id), "launchDate": date.strftime("%Y-%m-%d"), "satAPO": satAPO, "satECC":satECC, "satINC": satINC, "satPER": satPER, "satLONG": satLONG, "satPOS": satPOS}
-
-#     result['satellites'].append(new_satellite)
-#     # print(len(result['satellites']) , result)
-
-#     with open('../satellites.json', 'w') as file:
-#         json.dump(result, file)
-
-# def UpdateSatelliteByAdmin(name , new_name , launchDate , satAPO , satECC , satINC , satPER ,satLONG , satPOS):
-#     data = functions.get_satellites_data()
-#     # print(data)
-#     date = datetime.strptime(launchDate, "%Y-%m-%d")
-#     for key, value in enumerate(data):
-#         if (value['satNAME'] == name):
-#             value['satNAME'] = new_name
-#             value['launchDate'] = date.strftime("%Y-%m-%d")
-#             value['satAPO'] = satAPO
-#             value['satECC'] = satECC
-#             value['satINC'] = satINC
-#             value['satPER'] = satPER
-#             value['satLONG'] = satLONG
-#             value['satPOS'] = satPOS
-
-#     result = {"satellites": data}
-#     with open('../satellites.json', 'w') as file:
-#         json.dump(result, file)
 
 
+def accept_satellite(sat_name):
+    requests = functions.get_requests()
+    data = {}
+    for satellite in requests:
+        if satellite["satNAME"] == sat_name:
+            data = satellite
+            break
 
+    with open('satellites.json', 'r') as f:
+        satellites = json.load(f)
 
-#AddSatelliteByAdmin("Sat", "2001-04-27", 1.7, 0.4, 163.9, 263.3, 268.3, 185.2)
-#DeleteOneSatelliteByAdmin(9)
-#UpdateSatelliteByAdmin("Sat22" , "Sat" ,"2001-04-27", 1.7, 0.4, 163.9, 263.3, 268.3, 185.2)
+    parsed_satellites = satellites['satellites']
+
+    if (functions.collision_detection(data)):
+        new_satellite = {
+            'satID': max([sat['satID'] for sat in parsed_satellites]) + 1,
+            **data
+        }
+        parsed_satellites.append(new_satellite)
+        with open('satellites.json', 'w') as f:
+            json.dump({'satellites': parsed_satellites}, f, indent=2)
+        print("Satellite accepted!")
+        DeleteOneSatelliteByAdmin(sat_name)
+    else:
+        print("Process failed!")
+
+    return redirect('/admin')

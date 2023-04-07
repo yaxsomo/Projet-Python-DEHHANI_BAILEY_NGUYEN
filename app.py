@@ -1,7 +1,5 @@
 from sat_libraries import user, admin, functions
-from flask import Flask, flash, jsonify, make_response, redirect, render_template, request , url_for
-import json
-import os
+from flask import Flask, redirect, request , url_for
 import secrets
 
 app = Flask(__name__)
@@ -36,8 +34,6 @@ def show_user_interface():
     form_div += '</form></div>'
     
     num_sat, metrics = functions.calculate_satellite_metrics(data['satellites'])
-    print(num_sat, metrics['satAPO']['min'])
-    "satAPO", "satECC", "satINC", "satPER", "satLONG", "satPOS"
     apo_min = metrics['satAPO']['min']
     apo_max = metrics['satAPO']['max']
     apo_mean = metrics['satAPO']['mean']
@@ -110,11 +106,6 @@ def get_satellite_data(satellite_id):
     content += f'<p><strong>Position:</strong> {satellite["satPOS"]}</p>'
     content += '<hr>'
     content += '</div>'
-    # # return satellite
-    # fig = functions.test(satellite)
-    # output = io.BytesIO()
-    # FigureCanvas(fig).print_png(output)
-    # return Response(output.getvalue(), mimetype='image/png')
     return content
     
 @app.route('/add_satellite_user', methods=['POST'])
@@ -129,6 +120,7 @@ def add_sat_adm():
 @app.route('/admin' , methods=['POST' , 'GET'])
 def show_admin_interface():
     all_satellites = functions.get_satellites_data()
+    all_requests = functions.get_requests()
 
     # Create a div for the form
     form_div = '<div style="border: 1px solid black; padding: 10px; width: 100%;text-align: center;">'
@@ -156,6 +148,22 @@ def show_admin_interface():
 
     form_div += '<div style="border: 1px solid black; padding: 10px; width: 100%;text-align: center;">'
     form_div += '<h2>Requêtes des utilisateurs :</h2>'
+    for request in all_requests:
+        form_div += '<p>Satellite Name: {}</p>'.format(request['satNAME'])
+        form_div += '<p>Launch Date: {}</p>'.format(request['launchDate'])
+        form_div += '<p>Apogee: {}</p>'.format(request['satAPO'])
+        form_div += '<p>Eccentricity: {}</p>'.format(request['satECC'])
+        form_div += '<p>Inclination: {}</p>'.format(request['satINC'])
+        form_div += '<p>Perigee: {}</p>'.format(request['satPER'])
+        form_div += '<p>Longitude: {}</p>'.format(request['satLONG'])
+        form_div += '<p>Position: {}</p>'.format(request['satPOS'])
+        form_div += f'<form action="/accept_satellite/{request["satNAME"]}" method="POST">'
+        form_div += '<input type="submit" value="Accept">'
+        form_div += '</form>'
+        form_div += f'<form action="/deny_satellite/{request["satNAME"]}" method="POST">'
+        form_div += '<input type="submit" value="Deny">'
+        form_div += '</form>'
+        form_div += '<hr>'
     form_div += '</div>'
 
     content_div = '<div style="display:flex;">'
@@ -170,18 +178,11 @@ def show_admin_interface():
         content_div += '<p>Perigee: {}</p>'.format(satellite['satPER'])
         content_div += '<p>Longitude: {}</p>'.format(satellite['satLONG'])
         content_div += '<p>Position: {}</p>'.format(satellite['satPOS'])
-        # content_div += f'<form action="/update_satellite/{satellite["satNAME"]}" method="POST"" method="POST">'
-        # content_div += f'<input type="hidden" name="id" value="{satellite["satID"]}">'
-        # content_div += '<input type="submit" value="Update">'
-        # content_div += '</form>'
         content_div += f'<form action="/delete_satellite/{satellite["satID"]}" method="POST">'
         content_div += '<input type="submit" value="Delete">'
         content_div += '</form>'
         content_div += '<hr>'
     content_div += '</div>'
-
-    #content_div += '<div class="col-md-6">'
-    #content_div += '<h2>Requêtes des utilisateurs :</h2>'
     content_div += form_div
     content_div += '</div>'
 
@@ -190,48 +191,18 @@ def show_admin_interface():
 
 @app.route('/delete_satellite/<int:satellite_id>' , methods=['POST'])
 def Delete_satellite(satellite_id):
-    print(satellite_id , "OOOIOO")
     admin.DeleteOneSatelliteByAdmin(satellite_id)
     return redirect(url_for('show_admin_interface'))
 
+@app.route('/deny_satellite/<string:satellite_name>' , methods=['POST'])
+def Deny_satellite(satellite_name):
+    admin.DeleteOneSatelliteByAdmin(satellite_name)
+    return redirect(url_for('show_admin_interface'))
 
-# @app.route('/update_satellite/<string:satellite_name>' , methods=['POST' , 'GET'])
-# def Update_satellite(satellite_name):
-#     form_div = '<div style="border: 1px solid black; padding: 10px; width: 100%;text-align: center;">'
-#     form_div += f'<h3>Update Satellite: {satellite_name}</h3>'
-#     form_div += '<form method="POST" action="/admin">'
-#     form_div += '<label for="name">Satellite name:</label><br>'
-#     form_div += '<input type="text" id="name" name="name"><br>'
-#     form_div += '<label for="date">Launch date:</label><br>'
-#     form_div += '<input type="date" id="date" name="date"><br>'
-#     form_div += '<label for="apo">Apogee:</label><br>'
-#     form_div += '<input type="number" id="apo" name="apo"><span>&#176;</span><br>'
-#     form_div += '<label for="ecc">Eccentricity:</label><br>'
-#     form_div += '<input type="number" step="0.01" id="ecc" name="ecc"><span>&#176;</span><br>'
-#     form_div += '<label for="inc">Inclination:</label><br>'
-#     form_div += '<input type="number" id="inc" name="inc"><span>&#176;</span><br>'
-#     form_div += '<label for="per">Perigee:</label><br>'
-#     form_div += '<input type="number" id="per" name="per"><span>&#176;</span><br>'
-#     form_div += '<label for="long">Longitude:</label><br>'
-#     form_div += '<input type="number" step="0.01" id="long" name="long"><span>&#176;</span><br>'
-#     form_div += '<label for="pos">Position:</label><br>'
-#     form_div += '<input type="text" id="pos" name="pos"><span>&#176;</span><br><br>'
-#     form_div += '<input type="submit" value="Submit">'
-#     form_div += '</form></div>'
-
-#     name = request.form['name']
-#     date = request.form['date']
-#     apo = request.form['apo']
-#     ecc = request.form['ecc']
-#     inc = request.form['inc']
-#     per = request.form['per']
-#     long = request.form['long']
-#     pos = request.form['pos']
-
-#     admin.UpdateSatelliteByAdmin(satellite_name , name , date , apo , ecc , inc , per , long , pos)
-
-#     return form_div
-
+@app.route('/accept_satellite/<string:satellite_name>' , methods=['POST'])
+def Accept_satellite(satellite_name):
+    admin.accept_satellite(satellite_name)
+    return redirect(url_for('show_admin_interface'))
 
 
 if __name__ == '__main__':

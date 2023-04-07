@@ -582,6 +582,39 @@
       "satPER": 35.0,
       "satLONG": 70.0,
       "satPOS": 140.0
+    },
+    {
+      "satID": 54,
+      "satNAME": "TestSAT5",
+      "launchDate": "2014-01-02",
+      "satAPO": 1.0,
+      "satECC": 0.24,
+      "satINC": 26.0,
+      "satPER": 26.0,
+      "satLONG": 26.0,
+      "satPOS": 26.0
+    },
+    {
+      "satID": 55,
+      "satNAME": "TestSAT7",
+      "launchDate": "2001-02-02",
+      "satAPO": 2.0,
+      "satECC": 0.54,
+      "satINC": 40.0,
+      "satPER": 40.0,
+      "satLONG": 40.0,
+      "satPOS": 40.0
+    },
+    {
+      "satID": 56,
+      "satNAME": "TestSAT8",
+      "launchDate": "2022-02-02",
+      "satAPO": 3.0,
+      "satECC": 0.33,
+      "satINC": 40.0,
+      "satPER": 40.0,
+      "satLONG": 40.0,
+      "satPOS": 40.0
     }
   ]
 }
