@@ -5,7 +5,7 @@ from datetime import datetime
 
 def DeleteOneSatelliteByAdmin(SatelliteID):
     data = functions.get_satellites_data()
-    result = {"satellites" : ""}
+    result = {"satellites": ""}
     for key, value in enumerate(data):
         if (value['satID'] == SatelliteID):
             data.pop(key)
@@ -54,6 +54,10 @@ def UpdateSatelliteByAdmin(name , new_name , launchDate , satAPO , satECC , satI
     result = {"satellites": data}
     with open('../satellites.json', 'w') as file:
         json.dump(result, file)
+
+
+
+
 #AddSatelliteByAdmin("Sat", "2001-04-27", 1.7, 0.4, 163.9, 263.3, 268.3, 185.2)
-#DeleteOneSatelliteByAdmin(31)
-UpdateSatelliteByAdmin("Sat22" , "Sat" ,"2001-04-27", 1.7, 0.4, 163.9, 263.3, 268.3, 185.2)
+#DeleteOneSatelliteByAdmin(9)
+#UpdateSatelliteByAdmin("Sat22" , "Sat" ,"2001-04-27", 1.7, 0.4, 163.9, 263.3, 268.3, 185.2)

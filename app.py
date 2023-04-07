@@ -1,11 +1,8 @@
 from sat_libraries import user, admin, functions
-from flask import Flask, flash, jsonify, make_response, redirect, render_template, request
+from flask import Flask, flash, jsonify, make_response, redirect, render_template, request , url_for
 import json
 import os
 import secrets
-
-
-
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
@@ -152,7 +149,111 @@ def add_satellite():
     return redirect('/user')
 # Route API pour l'administrateurs
 
-# @app.route('/admin')
+@app.route('/admin' , methods=['POST' , 'GET'])
+def show_admin_interface():
+    all_satellites = functions.get_satellites_data()
+
+    form_div = '<div style="border: 1px solid black; padding: 10px; width: 100%;text-align: center;">'
+    form_div += '<h3>Add a new satellite:</h3>'
+    form_div += '<form method="POST" action="/add_satellite">'
+    form_div += '<label for="name">Satellite name:</label><br>'
+    form_div += '<input type="text" id="name" name="name"><br>'
+    form_div += '<label for="date">Launch date:</label><br>'
+    form_div += '<input type="date" id="date" name="date"><br>'
+    form_div += '<label for="apo">Apogee:</label><br>'
+    form_div += '<input type="number" id="apo" name="apo"><span>&#176;</span><br>'
+    form_div += '<label for="ecc">Eccentricity:</label><br>'
+    form_div += '<input type="number" step="0.01" id="ecc" name="ecc"><span>&#176;</span><br>'
+    form_div += '<label for="inc">Inclination:</label><br>'
+    form_div += '<input type="number" id="inc" name="inc"><span>&#176;</span><br>'
+    form_div += '<label for="per">Perigee:</label><br>'
+    form_div += '<input type="number" id="per" name="per"><span>&#176;</span><br>'
+    form_div += '<label for="long">Longitude:</label><br>'
+    form_div += '<input type="number" step="0.01" id="long" name="long"><span>&#176;</span><br>'
+    form_div += '<label for="pos">Position:</label><br>'
+    form_div += '<input type="text" id="pos" name="pos"><span>&#176;</span><br><br>'
+    form_div += '<input type="submit" value="Submit">'
+    form_div += '</form></div>'
+
+
+    form_div += '<div style="border: 1px solid black; padding: 10px; width: 100%;text-align: center;">'
+    form_div += '<h2>Requêtes des utilisateurs :</h2>'
+    form_div += '</div>'
+
+    content_div = '<div style="display:flex;">'
+    content_div += '<div style="border: 1px solid black; padding: 10px; width:100%;">'
+    content_div += '<h2>Liste des satellites :</h2>'
+    for satellite in all_satellites:
+        content_div += '<p>{}</p>'.format(satellite['satNAME'])
+        content_div += '<p>Launch Date: {}</p>'.format(satellite['launchDate'])
+        content_div += '<p>Apogee: {}</p>'.format(satellite['satAPO'])
+        content_div += '<p>Eccentricity: {}</p>'.format(satellite['satECC'])
+        content_div += '<p>Inclination: {}</p>'.format(satellite['satINC'])
+        content_div += '<p>Perigee: {}</p>'.format(satellite['satPER'])
+        content_div += '<p>Longitude: {}</p>'.format(satellite['satLONG'])
+        content_div += '<p>Position: {}</p>'.format(satellite['satPOS'])
+        content_div += f'<form action="/update_satellite/{satellite["satNAME"]}" method="POST"" method="POST">'
+        content_div += f'<input type="hidden" name="id" value="{satellite["satID"]}">'
+        content_div += '<input type="submit" value="Update">'
+        content_div += '</form>'
+        content_div += f'<form action="/delete_satellite/{satellite["satID"]}" method="POST">'
+        content_div += '<input type="submit" value="Delete">'
+        content_div += '</form>'
+        content_div += '<hr>'
+    content_div += '</div>'
+
+    #content_div += '<div class="col-md-6">'
+    #content_div += '<h2>Requêtes des utilisateurs :</h2>'
+    content_div += form_div
+    content_div += '</div>'
+
+
+    return content_div
+
+@app.route('/delete_satellite/<int:satellite_id>' , methods=['POST'])
+def Delete_satellite(satellite_id):
+    print(satellite_id , "OOOIOO")
+    admin.DeleteOneSatelliteByAdmin(satellite_id)
+    return redirect(url_for('show_admin_interface'))
+
+
+@app.route('/update_satellite/<string:satellite_name>' , methods=['POST' , 'GET'])
+def Update_satellite(satellite_name):
+    form_div = '<div style="border: 1px solid black; padding: 10px; width: 100%;text-align: center;">'
+    form_div += f'<h3>Update Satellite: {satellite_name}</h3>'
+    form_div += '<form method="POST" action="/admin">'
+    form_div += '<label for="name">Satellite name:</label><br>'
+    form_div += '<input type="text" id="name" name="name"><br>'
+    form_div += '<label for="date">Launch date:</label><br>'
+    form_div += '<input type="date" id="date" name="date"><br>'
+    form_div += '<label for="apo">Apogee:</label><br>'
+    form_div += '<input type="number" id="apo" name="apo"><span>&#176;</span><br>'
+    form_div += '<label for="ecc">Eccentricity:</label><br>'
+    form_div += '<input type="number" step="0.01" id="ecc" name="ecc"><span>&#176;</span><br>'
+    form_div += '<label for="inc">Inclination:</label><br>'
+    form_div += '<input type="number" id="inc" name="inc"><span>&#176;</span><br>'
+    form_div += '<label for="per">Perigee:</label><br>'
+    form_div += '<input type="number" id="per" name="per"><span>&#176;</span><br>'
+    form_div += '<label for="long">Longitude:</label><br>'
+    form_div += '<input type="number" step="0.01" id="long" name="long"><span>&#176;</span><br>'
+    form_div += '<label for="pos">Position:</label><br>'
+    form_div += '<input type="text" id="pos" name="pos"><span>&#176;</span><br><br>'
+    form_div += '<input type="submit" value="Submit">'
+    form_div += '</form></div>'
+
+    name = request.form['name']
+    date = request.form['date']
+    apo = request.form['apo']
+    ecc = request.form['ecc']
+    inc = request.form['inc']
+    per = request.form['per']
+    long = request.form['long']
+    pos = request.form['pos']
+
+    admin.UpdateSatelliteByAdmin(satellite_name , name , date , apo , ecc , inc , per , long , pos)
+
+    return form_div
+
 
 
 if __name__ == '__main__':
