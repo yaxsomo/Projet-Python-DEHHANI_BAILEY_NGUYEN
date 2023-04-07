@@ -34,19 +34,6 @@ sorted_satellites = sorted(satellites.values(), key=lambda x: datetime.datetime.
 with open('satellites.json', 'w') as f:
     json.dump({'satellites': sorted_satellites}, f)
 
-# Route API pour récupérer les données d'un satellite en particulier
-@app.route('/satellite/<int:satellite_id>')
-def get_satellite_data(satellite_id):
-    if satellite_id not in satellites:
-        return jsonify({"error": "Invalid satellite ID"}), 404
-    else:
-        data = satellites[satellite_id]
-        return jsonify(data)
-
-# Route API pour récupérer les données de tous les satellites
-@app.route('/satellites')
-def get_all_satellite_data():
-    return jsonify({"satellites": sorted_satellites})
 
 if __name__ == '__main__':
     app.run()

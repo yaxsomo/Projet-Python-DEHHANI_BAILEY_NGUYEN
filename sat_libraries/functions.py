@@ -6,7 +6,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 matplotlib.use("TKAgg")
 
-JSON_FILE_PATH = '../satellites.json'
+JSON_FILE_PATH = 'satellites.json'
 
 # Recuperer les satellites par ordre aleatoire
 def get_satellites_data():
@@ -59,12 +59,15 @@ def collision_detection(json_obj):
     # Load the JSON file into a Python object
     with open(JSON_FILE_PATH) as f:
         data = json.load(f)
-
+    
     # Iterate over the list of satellites in the JSON object
     for sat in data["satellites"]:
         # Check if the value of "satECC" matches the input JSON object
-        if sat["satECC"] == json_obj["satECC"]:
+        if float(sat["satECC"]) == float(json_obj["satECC"]):
             print("There is a possible collision ! Please modify the orbite's eccentricity")
+            return False
+        if sat["satNAME"] == json_obj["satNAME"]:
+            print("There is a possible collision ! Name already taken!")
             return False
         
     print("The path is clear ! Await for admin validation.")

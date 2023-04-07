@@ -1,16 +1,14 @@
 from sat_libraries import user, admin, functions
-from flask import Flask, jsonify, render_template
-import io
-from flask import Response
-import random
-from flask import Response
-from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-from matplotlib.figure import Figure
-import matplotlib.pyplot as plt
-import numpy as np
+from flask import Flask, flash, jsonify, make_response, redirect, render_template, request
+import json
+import os
+import secrets
+
+
 
 
 app = Flask(__name__)
+app.secret_key = secrets.token_hex(16)
 ## Routes :
 
 # Route API pour l'utilisateur
@@ -22,21 +20,21 @@ def show_user_interface():
     form_div += '<h3>Add a new satellite:</h3>'
     form_div += '<form method="POST" action="/add_satellite">'
     form_div += '<label for="name">Satellite name:</label><br>'
-    form_div += '<input type="text" id="name" name="name"><br>'
+    form_div += '<input type="text" id="name" name="name" required><br>'
     form_div += '<label for="date">Launch date:</label><br>'
-    form_div += '<input type="date" id="date" name="date"><br>'
+    form_div += '<input type="date" id="date" name="date" required><br>'
     form_div += '<label for="apo">Apogee:</label><br>'
-    form_div += '<input type="number" id="apo" name="apo"><span>&#176;</span><br>'
+    form_div += '<input type="number" id="apo" name="apo" required><span>&#176;</span><br>'
     form_div += '<label for="ecc">Eccentricity:</label><br>'
-    form_div += '<input type="number" step="0.01" id="ecc" name="ecc"><span>&#176;</span><br>'
+    form_div += '<input type="number" step="0.01" id="ecc" name="ecc" required><span>&#176;</span><br>'
     form_div += '<label for="inc">Inclination:</label><br>'
-    form_div += '<input type="number" id="inc" name="inc"><span>&#176;</span><br>'
+    form_div += '<input type="number" id="inc" name="inc" required><span>&#176;</span><br>'
     form_div += '<label for="per">Perigee:</label><br>'
-    form_div += '<input type="number" id="per" name="per"><span>&#176;</span><br>'
+    form_div += '<input type="number" id="per" name="per" required><span>&#176;</span><br>'
     form_div += '<label for="long">Longitude:</label><br>'
-    form_div += '<input type="number" step="0.01" id="long" name="long"><span>&#176;</span><br>'
+    form_div += '<input type="number" step="0.01" id="long" name="long" required><span>&#176;</span><br>'
     form_div += '<label for="pos">Position:</label><br>'
-    form_div += '<input type="text" id="pos" name="pos"><span>&#176;</span><br><br>'
+    form_div += '<input type="text" id="pos" name="pos" required><span>&#176;</span><br><br>'
     form_div += '<input type="submit" value="Submit">'
     form_div += '</form></div>'
     
@@ -122,9 +120,37 @@ def get_satellite_data(satellite_id):
     # return Response(output.getvalue(), mimetype='image/png')
     return content
     
+@app.route('/add_satellite', methods=['POST'])
+def add_satellite():
+    data = {
+        'satNAME': request.form['name'],
+        'launchDate': request.form['date'],
+        'satAPO': float(request.form['apo']),
+        'satECC': float(request.form['ecc']),
+        'satINC': float(request.form['inc']),
+        'satPER': float(request.form['per']),
+        'satLONG': float(request.form['long']),
+        'satPOS': float(request.form['pos'])
+    }
+    satellites = []
 
+    # Check if requests.json exists and load existing data
+    if os.path.exists('requests.json'):
+        with open('requests.json', 'r') as f:
+            file_data = f.read()
+            if file_data:
+                satellites = json.loads(file_data)
 
-# Route API pour l'administrateur
+    if(functions.collision_detection(data)):
+        satellites.append(data)
+        with open('requests.json', 'w') as f:
+            json.dump(satellites, f)
+        print("Request sent successfully!")  
+    else:
+        print("Request failed!")
+    
+    return redirect('/user')
+# Route API pour l'administrateurs
 
 # @app.route('/admin')
 
