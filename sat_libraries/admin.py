@@ -1,5 +1,5 @@
 import json
-import functions
+from sat_libraries import functions
 from datetime import datetime
 
 
@@ -27,18 +27,18 @@ def AddSatelliteByAdmin(name , launchDate , satAPO , satECC , satINC , satPER ,s
     date = datetime.strptime(launchDate, "%Y-%m-%d")
     result = {"satellites" : data}
 
-    print(len(result['satellites']))
+    # print(len(result['satellites']))
     new_satellite = {"satID": id, "satNAME": name + str(id), "launchDate": date.strftime("%Y-%m-%d"), "satAPO": satAPO, "satECC":satECC, "satINC": satINC, "satPER": satPER, "satLONG": satLONG, "satPOS": satPOS}
 
     result['satellites'].append(new_satellite)
-    print(len(result['satellites']) , result)
+    # print(len(result['satellites']) , result)
 
     with open('../satellites.json', 'w') as file:
         json.dump(result, file)
 
 def UpdateSatelliteByAdmin(name , new_name , launchDate , satAPO , satECC , satINC , satPER ,satLONG , satPOS):
     data = functions.get_satellites_data()
-    print(data)
+    # print(data)
     date = datetime.strptime(launchDate, "%Y-%m-%d")
     for key, value in enumerate(data):
         if (value['satNAME'] == name):
