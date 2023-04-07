@@ -1,5 +1,7 @@
 import datetime
 import json
+import math
+
 
 # Recuperer les satellites par ordre aleatoire
 def get_satellites_data():
@@ -28,3 +30,19 @@ def test(satellite):
     ax.set_zlabel('Z axis')
     plt.title(f"Orbit plot for {satellite['satNAME']}")
     return fig
+
+def calculate_satellite_speed(satellite_data):
+    # Gravitational parameter of Earth (m^3/s^2)
+    mu = 3.986e14
+    
+    # Calculate the distance between the center of the Earth and the satellite at periapsis
+    a = satellite_data["satAPO"]
+    e = satellite_data["satECC"]
+    r = (1 - e) * a
+    
+    # Calculate the velocity of the satellite
+    velocity = math.sqrt(mu / r)
+    
+    return velocity
+
+    
