@@ -1,10 +1,6 @@
-import datetime
 import json
-import math
-import numpy as np
-import matplotlib
-import matplotlib.pyplot as plt
-matplotlib.use("TKAgg")
+
+
 
 JSON_FILE_PATH = '../satellites.json'
 
