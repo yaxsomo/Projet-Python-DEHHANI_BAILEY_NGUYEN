@@ -39,9 +39,46 @@ def show_user_interface():
     form_div += '<input type="text" id="pos" name="pos"><span>&#176;</span><br><br>'
     form_div += '<input type="submit" value="Submit">'
     form_div += '</form></div>'
+    
+    num_sat, metrics = functions.calculate_satellite_metrics(data['satellites'])
+    print(num_sat, metrics['satAPO']['min'])
+    "satAPO", "satECC", "satINC", "satPER", "satLONG", "satPOS"
+    apo_min = metrics['satAPO']['min']
+    apo_max = metrics['satAPO']['max']
+    apo_mean = metrics['satAPO']['mean']
+    ecc_min = metrics['satECC']['min']
+    ecc_max = metrics['satECC']['max']
+    ecc_mean = metrics['satECC']['mean']
+    inc_min = metrics['satINC']['min']
+    inc_max = metrics['satINC']['max']
+    inc_mean = metrics['satINC']['mean']
+    per_min = metrics['satPER']['min']
+    per_max = metrics['satPER']['max']
+    per_mean = metrics['satPER']['mean']
+    long_min = metrics['satLONG']['min']
+    long_max = metrics['satLONG']['max']
+    long_mean = metrics['satLONG']['mean']
+    pos_min = metrics['satPOS']['min']
+    pos_max = metrics['satPOS']['max']
+    pos_mean = metrics['satPOS']['mean']
+    
 
 
-    # Create a div to display the satellite data and form side by side
+    metrics_display = '<div style="border: 1px solid black; padding: 10px; width:100%;">'
+    metrics_display += f'<h3>Satellites Metrics</h3>'
+    metrics_display += f'<p><strong>Number of satellites in orbit:</strong> {num_sat}</p>'
+    metrics_display += f'<p><strong>Apopsis data:</strong> MIN: {apo_min} | MAX: {apo_max} | MEAN: {apo_mean}</p>'
+    metrics_display += f'<p><strong>Ecentricity data:</strong> MIN: {ecc_min} | MAX: {ecc_max} | MEAN: {ecc_mean}</p>'
+    metrics_display += f'<p><strong>Inclination data:</strong> MIN: {inc_min} | MAX: {inc_max} | MEAN: {inc_mean}</p>'
+    metrics_display += f'<p><strong>Periopsis data:</strong> MIN: {per_min} | MAX: {per_max} | MEAN: {per_mean}</p>'
+    metrics_display += f'<p><strong>Longitude data:</strong> MIN: {long_min} | MAX: {long_max} | MEAN: {long_mean}</p>'
+    metrics_display += f'<p><strong>Position data:</strong> MIN: {pos_min} | MAX: {pos_max} | MEAN: {pos_mean}</p>'
+    metrics_display += '<hr>'
+    metrics_display += '</div>'
+
+
+
+    # Creation d'une div pour afficher les données satellite et le form
     content = '<div style="display:flex;">'
     content += '<div style="border: 1px solid black; padding: 10px; width:100%;">'
     for satellite in data['satellites']:
@@ -57,6 +94,8 @@ def show_user_interface():
         content += '<hr>'
     content += '</div>'
     content += form_div
+    content += metrics_display
+
     content += '</div>'
     return content
 
@@ -77,7 +116,7 @@ def get_satellite_data(satellite_id):
     content += '<hr>'
     content += '</div>'
     # # return satellite
-    # fig = test(satellite)
+    # fig = functions.test(satellite)
     # output = io.BytesIO()
     # FigureCanvas(fig).print_png(output)
     # return Response(output.getvalue(), mimetype='image/png')

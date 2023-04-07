@@ -1,6 +1,10 @@
 import datetime
 import json
 import math
+import numpy as np
+import matplotlib
+import matplotlib.pyplot as plt
+matplotlib.use("TKAgg")
 
 
 # Recuperer les satellites par ordre aleatoire
@@ -15,34 +19,35 @@ def get_maxId():
     All_id = [e['satID'] for e in data]
     return max(All_id)
 
-def test(satellite):
-    # Generate orbit plot
-    fig = plt.figure()
-    ax = fig.add_subplot(projection='3d')
-    u = np.linspace(0, 2 * np.pi, 100)
-    v = np.linspace(0, np.pi, 100)
-    x = satellite['satPOS'] * np.outer(np.cos(u), np.sin(v))
-    y = satellite['satPOS'] * np.outer(np.sin(u), np.sin(v))
-    z = satellite['satPOS'] * np.outer(np.ones(np.size(u)), np.cos(v))
-    ax.plot_surface(x, y, z, color='b')
-    ax.set_xlabel('X axis')
-    ax.set_ylabel('Y axis')
-    ax.set_zlabel('Z axis')
-    plt.title(f"Orbit plot for {satellite['satNAME']}")
-    return fig
+def calculate_satellite_metrics(satellites):
+    
+    num_satellites = len(satellites)
+    metrics = {}
+    
+    # Calculate metrics for each parameter
+    for param in ["satAPO", "satECC", "satINC", "satPER", "satLONG", "satPOS"]:
+        values = [sat[param] for sat in satellites]
+        metrics[param] = {
+            "max": round(max(values),1),
+            "min": round(min(values),1),
+            "mean": round(sum(values) / len(values),1)
+        }
+    
+    return num_satellites, metrics
 
-def calculate_satellite_speed(satellite_data):
-    # Gravitational parameter of Earth (m^3/s^2)
-    mu = 3.986e14
-    
-    # Calculate the distance between the center of the Earth and the satellite at periapsis
-    a = satellite_data["satAPO"]
-    e = satellite_data["satECC"]
-    r = (1 - e) * a
-    
-    # Calculate the velocity of the satellite
-    velocity = math.sqrt(mu / r)
-    
-    return velocity
 
-    
+def add_four_to_satPOS(json_file_path):
+    with open(json_file_path, 'r') as file:
+        data = json.load(file)
+
+    for satellite in data['satellites']:
+        print("sat ID : ", satellite['satID'], "satPOS : ", satellite['satPOS'])
+        if satellite['satPOS'] < 356:
+            satellite['satPOS'] += 4
+            print("sat ID : ", satellite['satID'], "satPOS : ", satellite['satPOS'])
+        else:
+            satellite['satPOS'] += 4 - 360
+            print("sat ID : ", satellite['satID'], "satPOS : ", satellite['satPOS'])
+
+    with open(json_file_path, 'w') as file:
+        json.dump(data, file, indent=4)
