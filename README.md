@@ -24,10 +24,8 @@ Tableau de bord pour visualiser les données de suivi des satellites
 
 ## Métriques :
 
-- Position des satellites en temps réel
-- Orbites
-- Périapsis
-- Apoapsis
+- Données minimales, maximales et moyennes des satellites en temps réel
+- Orbites ( Periapsis, Apoapsis, Eccentricité, Inclinaison, Longitude, Position[True Anomaly] )
 
 
 ## Métriques Optionnelles : 
