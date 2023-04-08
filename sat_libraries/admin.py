@@ -2,6 +2,9 @@ import json
 from flask import redirect, request
 from sat_libraries import functions
 
+#Librairie Admin
+
+
 
 def DeleteOneSatelliteByAdmin(SatelliteID):
     data = functions.get_satellites_data()

@@ -32,7 +32,7 @@ def add_satellite_user():
     }
     satellites = []
 
-    # Check if requests.json exists and load existing data
+    # Verification de l'existance du fichier
     if os.path.exists('requests.json'):
         with open('requests.json', 'r') as f:
             file_data = f.read()

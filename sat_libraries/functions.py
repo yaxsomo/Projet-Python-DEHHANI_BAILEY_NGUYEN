@@ -23,7 +23,7 @@ def calculate_satellite_metrics(satellites):
     num_satellites = len(satellites)
     metrics = {}
     
-    # Calculate metrics for each parameter
+    # Calcul des metriques pour chaque parametre
     for param in ["satAPO", "satECC", "satINC", "satPER", "satLONG", "satPOS"]:
         values = [sat[param] for sat in satellites]
         metrics[param] = {
@@ -40,13 +40,10 @@ def add_four_to_satPOS():
         data = json.load(file)
 
     for satellite in data['satellites']:
-        # print("sat ID : ", satellite['satID'], "satPOS : ", satellite['satPOS'])
         if satellite['satPOS'] < 356:
             satellite['satPOS'] += 4
-            # print("sat ID : ", satellite['satID'], "satPOS : ", satellite['satPOS'])
         else:
             satellite['satPOS'] += 4 - 360
-            # print("sat ID : ", satellite['satID'], "satPOS : ", satellite['satPOS'])
 
     with open(JSON_FILE_PATH, 'w') as file:
         json.dump(data, file, indent=4)
@@ -54,13 +51,12 @@ def add_four_to_satPOS():
 
 def collision_detection(json_obj):
 
-    # Load the JSON file into a Python object
     with open(JSON_FILE_PATH) as f:
         data = json.load(f)
     
-    # Iterate over the list of satellites in the JSON object
+    # Boucle sur liste de satellites
     for sat in data["satellites"]:
-        # Check if the value of "satECC" matches the input JSON object
+        # Verification de l'Eccentricité et du nom
         if float(sat["satECC"]) == float(json_obj["satECC"]):
             print("There is a possible collision ! Please modify the orbite's eccentricity")
             return False

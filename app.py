@@ -4,13 +4,16 @@ import secrets
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
+
+
 ## Routes :
+#######################################
 
 # Route API pour l'utilisateur
 @app.route('/user')
 def show_user_interface():
     data = user.get_all_satellite_data().json
-        # Create a div for the form
+        # Form
     form_div = '<div style="border: 1px solid black; padding: 10px; width: 100%;text-align: center;">'
     form_div += '<h3>Add a new satellite:</h3>'
     form_div += '<form method="POST" action="/add_satellite_user">'
@@ -33,6 +36,7 @@ def show_user_interface():
     form_div += '<input type="submit" value="Submit">'
     form_div += '</form></div>'
     
+    #Metriques
     num_sat, metrics = functions.calculate_satellite_metrics(data['satellites'])
     apo_min = metrics['satAPO']['min']
     apo_max = metrics['satAPO']['max']
@@ -53,8 +57,6 @@ def show_user_interface():
     pos_max = metrics['satPOS']['max']
     pos_mean = metrics['satPOS']['mean']
     
-
-
     metrics_display = '<div style="border: 1px solid black; padding: 10px; width:100%;">'
     metrics_display += f'<h3>Satellites Metrics</h3>'
     metrics_display += f'<p><strong>Number of satellites in orbit:</strong> {num_sat}</p>'
@@ -69,7 +71,7 @@ def show_user_interface():
 
 
 
-    # Creation d'une div pour afficher les données satellite et le form
+    # Div pour données satellites et form
     content = '<div style="display:flex;">'
     content += '<div style="border: 1px solid black; padding: 10px; width:100%;">'
     for satellite in data['satellites']:
@@ -90,6 +92,7 @@ def show_user_interface():
     content += '</div>'
     return content
 
+#Route: Satellite ID
 @app.route('/user/<int:satellite_id>')
 def get_satellite_data(satellite_id):
     satellite = user.get_satellite_data(satellite_id).json
@@ -107,22 +110,24 @@ def get_satellite_data(satellite_id):
     content += '<hr>'
     content += '</div>'
     return content
-    
+
+#Route: Demande d'jout d'un satellite par l'User
 @app.route('/add_satellite_user', methods=['POST'])
 def add_sat_usr():
     return user.add_satellite_user()
 
+#Route: Ajout d'un satellite par l'Admin
 @app.route('/add_satellite_admin', methods=['POST'])
 def add_sat_adm():
     return admin.add_satellite_admin()
-# Route API pour l'administrateurs
 
+# Route API pour l'administrateurs
 @app.route('/admin' , methods=['POST' , 'GET'])
 def show_admin_interface():
     all_satellites = functions.get_satellites_data()
     all_requests = functions.get_requests()
 
-    # Create a div for the form
+    # Form
     form_div = '<div style="border: 1px solid black; padding: 10px; width: 100%;text-align: center;">'
     form_div += '<h3>Add a new satellite:</h3>'
     form_div += '<form method="POST" action="/add_satellite_admin">'
@@ -145,7 +150,7 @@ def show_admin_interface():
     form_div += '<input type="submit" value="Submit">'
     form_div += '</form></div>'
 
-
+    #Requetes
     form_div += '<div style="border: 1px solid black; padding: 10px; width: 100%;text-align: center;">'
     form_div += '<h2>Requêtes des utilisateurs :</h2>'
     for request in all_requests:
@@ -166,6 +171,7 @@ def show_admin_interface():
         form_div += '<hr>'
     form_div += '</div>'
 
+    #Div pour données satellites, le form d'ajout et les requetes
     content_div = '<div style="display:flex;">'
     content_div += '<div style="border: 1px solid black; padding: 10px; width:100%;">'
     content_div += '<h2>Liste des satellites :</h2>'
@@ -189,16 +195,19 @@ def show_admin_interface():
 
     return content_div
 
+#Route : Suppression d'un satellite
 @app.route('/delete_satellite/<int:satellite_id>' , methods=['POST'])
 def Delete_satellite(satellite_id):
     admin.DeleteOneSatelliteByAdmin(satellite_id)
     return redirect(url_for('show_admin_interface'))
 
+#Route : Refus de demande d'ajout du satellite
 @app.route('/deny_satellite/<string:satellite_name>' , methods=['POST'])
 def Deny_satellite(satellite_name):
     admin.DeleteOneSatelliteByAdmin(satellite_name)
     return redirect(url_for('show_admin_interface'))
 
+#Route : Acceptation de demande d'ajout du satellite
 @app.route('/accept_satellite/<string:satellite_name>' , methods=['POST'])
 def Accept_satellite(satellite_name):
     admin.accept_satellite(satellite_name)

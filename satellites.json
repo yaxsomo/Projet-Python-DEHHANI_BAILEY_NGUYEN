@@ -615,6 +615,28 @@
       "satPER": 40.0,
       "satLONG": 40.0,
       "satPOS": 40.0
+    },
+    {
+      "satID": 57,
+      "satNAME": "SatTEST9",
+      "launchDate": "2017-02-02",
+      "satAPO": 2.0,
+      "satECC": 0.14,
+      "satINC": 50.0,
+      "satPER": 50.0,
+      "satLONG": 50.0,
+      "satPOS": 50.0
+    },
+    {
+      "satID": 58,
+      "satNAME": "SatTest10",
+      "launchDate": "2022-10-20",
+      "satAPO": 3.0,
+      "satECC": 0.12,
+      "satINC": 40.0,
+      "satPER": 50.0,
+      "satLONG": 100.0,
+      "satPOS": 130.0
     }
   ]
 }
